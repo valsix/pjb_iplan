@@ -1,0 +1,161 @@
+<table>
+    <tr>
+        <td colspan="12">
+            <h1>Monitoring PRK AO</h1>
+        </td>
+    </tr>
+    <tr>
+        <th>Tahun Anggaran</th>
+        <td>{{$input_tahun}}</td>
+    </tr>
+
+    <tr>
+        <th>Strategi Bisnis</th>
+        <td>{{$input_sb->name}}</td>
+    </tr>
+    <tr>
+        <th>Distrik</th>
+        <td>{{$input_distrik->name}}</td>
+    </tr>
+    <tr>
+        <th>Lokasi</th>
+        <td>
+          @if($input_lokasi)
+          <?php $val = null; ?>
+          <?php $ival = null; ?>
+          @foreach($input_lokasi as $l)
+          <?php
+            $ival++;
+            if($ival==1)  
+              $val = $val.' '.$l->name; 
+            else
+              $val = $val.', '.$l->name; 
+          ?>
+          @endforeach
+          {{ $val }}
+        @else
+          {{ '' }}
+        @endif
+        </td>
+    </tr>
+    <tr>
+        <th>Fase</th>
+        <td>{{'Ketetapan'}}</td>
+    </tr>
+    <tr>
+        <th>s.d Bulan</th>
+        <td>{{$nama_bln_dipilih}}</td>
+    </tr>
+    <tr>
+        <th>RKAU</th>
+        <td>{{ $name_draft_rkau }}</td>
+    </tr>
+    <tr>
+        <th>Form 6 Reimburse</th>
+        <td>{{ $name_draft_form_6_reimburse }}</td>
+    </tr>
+    <tr>
+        <th>Form 6 Rutin</th>
+        <td>{{ $name_draft_form_6_rutin }}</td>
+    </tr>
+    <tr>
+        <th>Form Bahan Bakar</th>
+        <td>{{ $name_draft_form_bahan_bakar }}</td>
+    </tr>
+    <tr>
+        <th>Form Penyusutan</th>
+        <td>{{ $name_draft_form_penyusutan }}</td>
+    </tr>
+</table>
+<div class="row">
+    <div class="col-md-12">
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:middle">Identity PRK Parent</th>
+          <th rowspan="2" style="vertical-align:middle">Identity PRK Inti</th>
+          <th rowspan="2" style="vertical-align:middle">PRK Kegiatan</th>
+          <th rowspan="2" style="vertical-align:middle">Identity PRK Kegiatan</th>
+          <!--RENCANA-->
+           <th colspan="2">Rencana</th>
+          <!--RENCANA Update-->
+
+          <th colspan="3">Rencana Update</th>
+
+          <th>Realisasi</th>
+
+          <th>Estimasi Realisasi</th>
+            <!-- End of rencena -->
+        </tr>
+        <tr>
+          <th colspan="1"></th>
+          <th colspan="1"></th>
+          <th colspan="1"></th>
+          <th colspan="1"></th>
+
+          <th colspan="1">Ijin Proses (LAB)</th>
+          <th colspan="1">Beban (MAT)</th>
+
+          <th colspan="1">Ijin Proses (LAB)</th>
+          <th colspan="1">Beban (MAT)</th>
+          <th colspan="1">Beban s.d Bulan</th>
+
+          <th colspan="1">Beban s.d Bulan</th>
+
+          <th colspan="1">Beban (MAT)</th>
+
+        </tr>
+      </thead>
+        <tbody>
+          <!-- form rkau, 6, 10 -->
+            @foreach($dataparent as $key_form => $parent_per_form)
+                @foreach($parent_per_form as $key_parent => $parent)
+                  @foreach($datainti[$key_form] as $key_inti=>$inti)
+                    @if($inti['prk_parent'] == $key_parent)
+                      @foreach($datakegiatan[$key_form] as $key_kegiatan => $kegiatan)
+                        @if($kegiatan['prk_inti'] == $key_inti)
+
+                      <!-- parent -->
+                      @if($key_parent!= '')
+                      <tr>
+
+                        <td>{{substr($parent['desc_prk_parent'],0,40)}}</td><!-- <th>Nomor Project /PRK</th> -->
+                        <!-- inti -->
+
+                        <td>{{substr($inti['desc_prk_inti'],0,40)}}</td><!-- <th>Nomor Project /PRK</th> -->
+                        <!-- kegiatan -->
+                                @if(strlen($kegiatan['prk_kegiatan'])!=8)
+                                <td>
+                                  {{-- substr($kegiatan['prk_kegiatan'],2,8) --}}
+                                  {{ preg_match('/E/', substr($kegiatan['prk_kegiatan'],2,8)) ? "'".substr($kegiatan['prk_kegiatan'],2,8) : substr($kegiatan['prk_kegiatan'],2,8) }}
+                                </td><!-- <th>PRK kegiatan</th> -->
+                                @else
+                                <td>
+                                  {{-- $kegiatan['prk_kegiatan'] --}}
+                                  {{ preg_match('/E/', $kegiatan['prk_kegiatan']) ? "'".$kegiatan['prk_kegiatan'] : $kegiatan['prk_kegiatan'] }}
+                                </td>
+                                @endif
+
+                                <td>{{substr($kegiatan['desc_prk_kegiatan'],0,40)}}</td><!-- <th>Identity PRK Kegiatan</th> -->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['ijin_proses'],0,",",".") }}</td><!-- <th>Ijin Proses (LAB)</th> -->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['beban_mat'],0,",",".") }}</td><!-- <th>Beban (MAT)</th> -->
+                                <!--Rencana Update-->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['ijin_proses_update'],0,",",".") }}</td><!-- <th>Ijin Proses (LAB)</th> -->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['beban_mat_update'],0,",",".") }}</td><!-- <th>Beban (MAT)</th> -->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['disburse_sd_bulan'],0,",",".") }}</td><!-- <th>Beban (MAT) sd Bulan</th> -->
+                                <!--Realisasi-->
+                                <td style="text-align: right;">{{ number_format(1000 * $kegiatan['disburse_sd_bulan_realisasi'],0,",",".") }}</td><!-- <th>Beban (MAT) sd Bulan</th> -->
+
+                                <td style="text-align: right;">0</td><!-- <th>Beban (MAT)</th> -->
+                            </tr>
+                            @endif
+                            @endif
+                        @endforeach <!-- end of inti -->
+                        @endif
+                    @endforeach <!-- end of inti -->
+                @endforeach <!-- end of parent -->
+                @endforeach
+                <!-- end of form rkau, 6 dan 10 -->
+
+        </tbody>
+    </div>
+</div>

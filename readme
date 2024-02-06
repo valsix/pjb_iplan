@@ -1,0 +1,35 @@
+Auto Insert Query PLJPRK AI & AO (Server Ubuntu/Debian)
+
+0. Copy file csv AI & AO ke folder "/var/lib/postgresql/9.3/"
+1. Jalankan script "sudo crontab -e".
+2. Copy script insert query Query PLJPRK AI setiap tanggal 4 jam 00.00 dibawah ini: 
+00 0 4 * * psql -h localhost -d pjb_iplan_pgdl_23mei18_uat -U postgres -c "COPY pgdl_pljprk_ai (dstrct_code, tran_type, account_code, years, months, tran_amount, preq_no, preq_item_no, description, po_no, po_item, val_required, val_received, project_no, description_1, creation_date) FROM '/var/lib/postgresql/9.3/AI Unit SPTN-2018.csv' delimiter ';' csv NULL AS '';" >> /var/log/cron-error.log 2>&1
+3. Copy script insert query Query PLJPRK AO setiap tanggal 4 jam 00.00 dibawah ini:
+00 0 4 * * psql -h localhost -d pjb_iplan_pgdl_23mei18_uat -U postgres -c "COPY pgdl_pljprk_ao (dstrct_code, years, months, account_code, segmen_3, segmen_4, exp_element, project_no, tran_amount, preq_no, preq_item_no, description, po_no, po_item, val_required, val_received, creation_date) FROM '/var/lib/postgresql/9.3/template_csv_ao_2.csv' delimiter ',' csv NULL AS '';" >> /var/log/cron-error.log 2>&1
+4. Simpan.
+
+Setting Output Cron
+5. Secara default tersimpan di /var/log/syslog.
+6. Untuk mengubah ke file lain, buka /etc/rsyslog.d/50-default.conf
+7. Uncomment #cron.*
+8. Jalankan "sudo service rsyslog restart".
+9. Output cron akan tercatat di /var/log/cron.log.
+
+Setting Error Output Cron
+10. Script " >> /var/log/cron-error.log 2>&1 " pada nomer 2 & 3 fungsinya untuk mencatat error log cron job.
+11. Buat file /var/log/cron-error.log untuk error log cron.
+12. Selesai.
+
+---------------------------------------------------
+Setting Insert PLJPRK Scheduler Setiap Bulan
+---------------------------------------------------
+1. Pastikan OS Server adalah Linux.
+2. Masuk Terminal sebagai Root atau Administrator.
+3. Ketik "crontab -e".
+4. Copy command di bawah ini, dan sesuaikan path nya:
+	* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
+	
+	Catatan: contoh command dengan path sbb
+	* * * * * php /var/www/pjb_pgdl/laravel/artisan schedule:run >> /dev/null 2>&1
+	
+5. Simpan. Selesai.

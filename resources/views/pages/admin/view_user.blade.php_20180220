@@ -1,0 +1,66 @@
+@extends('layouts.app')
+@section('content')
+<h3>Detail User</h3>
+<div class="row">
+    <div class="col-md-6">
+        <!-- <div class="box box-success"> -->
+            <!-- <div class="body box-body"> -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>{{$user->name}}</h1>
+                        <div class="divider"></div>
+						<table class="table table-hover">
+							<tbody>
+								<tr>
+									<th>Username</th>
+									<td>:</td>
+									<td>{{ $user->username }}</td>
+								</tr>
+								<tr>
+									<th>Grup saat ini</th>
+									<td>:</td>
+									<td>
+										@if($current_roles != NULL)
+											@foreach ($current_roles as $row)
+												<span class="label label-success">{{$row->display_name}}</span>
+											@endforeach
+										@else
+											<span>tidak memiliki grup</span>
+										@endif
+									</td>
+								</tr>
+								<tr>
+									<th>Status user</th>
+									<td>:</td>
+									<td> {{ ($user->status=='1') ? 'Aktif' : 'Tidak Aktif' }}</td>
+								</tr>
+								<tr>
+									<th>Nama</th>
+									<td>:</td>
+									<td>{{ $user->name }}</td>
+								</tr>
+								<tr>
+									<th>Email</th>
+									<td>:</td>
+									<td>{{ $user->email }}</td>
+								</tr>
+								
+							</tbody>
+						</table>
+                    </div>
+                </div>
+            <!-- </div> -->
+        <!-- </div> -->
+    </div>
+</div>
+
+{!! HTML::style('datatables/css/dataTables.bootstrap.css') !!}
+{!! HTML::script('datatables/js/jquery.dataTables.min.js') !!}
+{!! HTML::script('datatables/js/dataTables.bootstrap.min.js') !!}
+{!! HTML::style('datatables/css/dataTables.custom.css') !!}
+
+<script type="text/javascript">
+    
+</script>
+
+@endsection

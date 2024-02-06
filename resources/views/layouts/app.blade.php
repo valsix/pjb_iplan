@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>PT PJB | iPlan</title>
+        <!-- Bootstrap -->
+        <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+        <!-- NProgress -->
+        <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+        <!-- iCheck -->
+        <link href="{{ asset('vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
+
+        <!-- bootstrap-progressbar -->
+        <link href="{{ asset('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
+        <!-- bootstrap-daterangepicker -->
+        <link href="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+        <!-- select2 -->
+        <link href="{{ asset('js/select2/select2.min.css') }}" rel="stylesheet">
+        <script src="{{ asset('js/select2/jquery.js') }}"></script>
+        <script src="{{ asset('js/select2/select2.min.js') }}"></script>
+
+        <link href="{{ asset('vendors/style.css') }}" rel="stylesheet">
+
+        <!-- highcharts -->
+        <script src="{{ asset('js/highcharts.js') }}"></script>
+        <script src="{{ asset('js/exporting.js') }}"></script>
+
+        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
+        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css"> -->
+
+        <link href="{{ asset('vendors/datatables.net.css/1.10.16/jquery.dataTables.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendors/datatables.net.css/buttons/1.4.2/buttons.dataTables.min.css') }}" rel="stylesheet">
+
+        <!-- EASYUI 1.4.5 -->
+        <!-- <link rel="stylesheet" type="text/css" href="{{ asset('vendors/easyui/themes/default/easyui.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendors/easyui/themes/icon.css') }}">
+        <script type="text/javascript" src="{{ asset('vendors/easyui/jquery.easyui.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('vendors/easyui/datagrid-groupview.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('vendors/easyui/globalfunction.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('vendors/easyui/kalender-easyui.js') }}"></script>  -->
+
+        @yield('css_page')
+
+        <!-- Custom Theme Style -->
+        <link href="{{ asset('build/css/custom.css') }}" rel="stylesheet">
+
+    </head>
+
+    <body class="nav-sm">
+    <div class="se-pre-con"></div>
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                @include('layouts.navbar')
+            </div>
+
+            <!-- top navigation -->
+                @include('layouts.topnav')
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                @yield('content')
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    2017 © <a href="//iplan.plnnusantarapower.co.id">iplan.plnnusantarapower.co.id</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <!-- <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script> -->
+    <!-- untuk tambah/edit permission -->
+    <script src="{{ asset('js/jquery-ui.min.js') }}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <!-- FastClick -->
+    <script src="{{ asset('vendors/fastclick/lib/fastclick.js') }}"></script>
+    <!-- NProgress -->
+    <script src="{{ asset('vendors/nprogress/nprogress.js') }}"></script>
+    <!-- Chart.js') }} -->
+    <script src="{{ asset('vendors/Chart.js/dist/Chart.min.js') }}"></script>
+    <!-- gauge.js') }} -->
+    <script src="{{ asset('vendors/gauge.js/dist/gauge.min.js') }}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{{ asset('vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
+    <!-- iCheck -->
+    <script src="{{ asset('vendors/iCheck/icheck.min.js') }}"></script>
+    <!-- DateJS -->
+    <script src="{{ asset('vendors/DateJS/build/date.js') }}"></script>
+    <!-- bootstrap-datetimepicker -->
+    <script src="{{ asset('vendors/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="{{ asset('build/js/custom.min.js') }}"></script>
+
+    <!-- <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+    <script src="{{ asset('vendors/datatables.net/1.10.16/js/jquery.dataTables.min.js') }}"></script>
+
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script> -->
+    <script src="{{ asset('js/modernizr/modernizr.js') }}"></script>
+
+    <script type="text/javascript">
+        $('.loading').click(function() {
+            // Animate loader off screen
+            $(".se-pre-con").fadeIn("slow");;
+        });
+    </script>
+
+    @yield('js_page')
+
+    @yield('menu_RKAP')
+
+
+    </body>
+</html>

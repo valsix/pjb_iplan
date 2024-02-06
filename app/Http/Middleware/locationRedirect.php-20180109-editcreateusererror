@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use App\Entities\Role;
+use App\Entities\User;
+
+class locationRedirect
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        //LDAP
+        // if (session('username')) {
+        //   # code...
+        //   $username = session('username');
+        // }
+        // else{
+        //   return redirect('login');
+        // }
+        // echo "Middleware";
+
+        $user_id = session('user_id');
+        if ($user_id) {
+            $user = User::find($user_id);
+            $data['user'] = $user;
+            $data['username'] = $user->name;
+            // $data['data_role_user'] = Role::all();
+            $data['data_role_user'] = $user->roles()->get();
+            // dd($user->roles()->get());
+            session(['role_id' => $user->roles()->first()->id]);
+            $data['role'] = $user->roles()->first();
+            $data['role_id'] = $user->roles()->first()->id;
+             view()->share($data);
+            # code...
+        }
+        else{
+            return redirect('login');
+        }
+        return $next($request);
+    }
+
+     /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/');
+    }
+}
+
+// {
+//        // getting user country based on ip address
+//         $ip= $request->ip();
+//         $user_country_code="us";
+//         $ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
+//         if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
+//              $user_country_code= @$ipdat->geoplugin_countryCode;
+//          }
+//          if($user_country_code!=null &&  $user_country_code !="us"){
+//            $user_domain=$user_country_code."yourdomain.com";
+//            return return Redirect::to($user_domain);
+//          }
+//         return $next($request);
+//     }

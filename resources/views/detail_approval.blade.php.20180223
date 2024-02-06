@@ -1,0 +1,168 @@
+@extends('layouts.app')
+
+@section('css_page')
+    <!-- Datatables -->
+    <link href="{{ asset('vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+@endsection
+
+@section('js_page')
+    <script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+    <script src="{{ asset('vendors/jszip/dist/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendors/pdfmake/build/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('vendors/pdfmake/build/vfs_fonts.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#datatable').dataTable( {
+            "searching": false
+        } );
+    </script>
+
+
+@endsection
+
+@section('content')
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+     <div role="main">
+          <div>
+            <div class="page-title">
+              <div>
+                  <div class="col-md-9">
+                  <h3> Approval {{ $jenis->name }}</h3>
+                            <table id="datatables" class="table table-striped table-bordered table-hover">
+                              <tr> 
+                                <td> Tahun Anggaran </td>
+                                <td>{{ $tahun_anggaran }}</td>
+                              </tr>
+                              <tr>
+                                <td> Struktur Bisnis</td>
+                                <td>{{ $lokasi->distrik->strategi_bisnis->name }}</td>
+                              </tr>
+                              <tr>
+                                <td>Distrik</td>
+                                <td>{{ $lokasi->distrik->name }}</td>
+                              </tr>
+                              <tr>
+                                <td>Lokasi</td>
+                                <td>{{ $lokasi->name }}</td>
+                              </tr>
+                            </table>
+                        <h3> Daftar Draft/Versi </h3>
+                          <table id="datatables" class="table table-striped table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                <th> No. </th>
+                                <th> Fase </th>
+                                <th> Draft/Versi </th>
+                                <th> Konseptor </th>
+                                <th> Status </th>
+                                <th> Aksi </th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                              <?php $no=1;?>
+                              @foreach ($fileapproval as $item)
+                                <tr>
+                                  <td>{{ $no++ }}</td>
+                                  <td>
+                                      <?php if ($item->latest_approval_id): ?>
+                                        {{ $item->faseterakhir->fase->name }}                            
+                                      <?php else: ?>
+                                        {{ $item->approval->fase->name }}
+                                      <?php endif ?>
+                                  </td>
+                                  <td>{{ $item->fileImport->draft_versi }}</td>
+                                  <td>{{ $item->konseptor->name }} </td>
+                                  <td>{{ $item->fileapprovalstatus->name }} {{ $item->approvalby->name }} </td>
+                                  <td><a href="detail_approval" class="btn btn-primary" data-toggle="tooltip" title="detail"> Detail
+                                  <a href="{{ asset($item->fileImport->file) }}" class="btn btn-warning" data-toggle="tooltip" title="Download Original Excel">
+                                  <span class="glyphicon glyphicon-download-alt"></span>
+                                  </a>
+                                    <a href="{{ route('fileimport.export.use', ['version_id' => $item->fileImport->version_id, 'id' => $item->file_import_id]) }}" class="btn btn-info" data-toggle="tooltip" title="Download Processed Excel">
+                                  <span class="glyphicon glyphicon-download-alt"></span>
+                                </a></td>
+                                </tr>
+                              @endforeach
+                              </tbody>    
+                          </table>
+                            <h3> Approval</h3>
+                            <form method="post" role="form">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                {{ csrf_field() }}
+                                <input type="hidden" name="jenis_id" value="<?php echo $jenis_id ?>">
+                                <input type="hidden" name="fase_id" value="<?php echo $fase->id ?>">
+                                <input type="hidden" name="tahun_anggaran" value="<?php echo $tahun_anggaran ?>">
+                                <input type="hidden" name="lokasi_id" value="<?php echo $lokasi->id ?>" >
+                                <!-- <div class="row">
+                                <div class="col-md-5"> <label> Fase </label> </div>
+                                <div class="col-md-4">
+                                  <p>{{-- $fase->name --}}
+                                </div>
+                                </div>
+                                <br> -->
+                                <div class="row">
+                                <div class="col-md-5"> <label> Draft/Versi yang digunakan </label> </div>
+                                <div class="col-md-7"> 
+                                  <select class="form-control" name="file_approval_selected_id">
+                                    @foreach ($fileapproval as $item)
+                                      <option value="{{ $item->id }}">{{ $item->fileImport->draft_versi }}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                <div class="col-md-5"> <label> Status Approval </label> </div>
+                                <div class="col-md-7"> 
+                                  <select class="form-control" name="file_approval_status_id">
+                                  @foreach($file_approval_status as $sp)
+                                    <option value="{{ $sp->id }}"> {{ $sp->name.' '.$role_name }} </option>
+                                  @endforeach
+                                  </select>
+                                </div>
+                                </div>
+                                <br>
+                                <!-- <div class="row {{ $errors->has('keterangan') ? ' has-error' : '' }}">
+                                <div class="col-md-5"> <label> Alasan Revisi/Ditolak </label> </div>
+                                <div class="col-md-7"> 
+                                  <textarea name="keterangan" type="text" value="{{ old('keterangan') }}" required="required"></textarea>
+                                  @if($errors->has('keterangan'))
+                                    <span class="help-block">
+                                      <strong>{{ $errors->first('keterangan') }}</strong>
+                                    </span>
+                                  @endif
+                                </div>
+                                </div> -->
+                                <br>
+                                <div class=" col-xs-12 col-md-offset-5">
+                                  <?php //if ($show_button): ?>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>                                
+                                  <?php //endif ?>
+                                <a href="{{ url()->previous() }}" class="btn btn-default" >Kembali</a>                          
+                              </div>
+                              </form>
+                         </div>
+                     </div>
+                  </div>
+                </div>
+                </div>
+  </div>
+</div>
+    
+@endsection
